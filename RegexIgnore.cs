@@ -13,16 +13,16 @@ namespace RegexIgnore
     IHost _Host;
     IHost IPlugInBase.Host { get => _Host; set => _Host=value; }
 
-    public JHSoftware.SimpleDNS.Plugin.IPlugInBase.PlugInTypeInfo GetPlugInTypeInfo()
+    public TypeInfo GetTypeInfo()
     {
-      JHSoftware.SimpleDNS.Plugin.IPlugInBase.PlugInTypeInfo rv;
+      TypeInfo rv;
       rv.Name = "Regex Ignore";
       rv.Description = "Ignore DNS requests where requested name matches a regular expression";
-      rv.InfoURL = "https://simpledns.plus/kb/184/regex-ignore-plug-in";
+      rv.InfoURL = "https://simpledns.plus/plugin-regexignore";
       return rv;
     }
 
-    public System.Threading.Tasks.Task<bool> IgnoreRequest(IDNSRequest request)
+    public System.Threading.Tasks.Task<bool> IgnoreRequest(IRequestContext request)
     {
       return System.Threading.Tasks.Task.FromResult(rx.IsMatch(request.QName.ToString()));
     }
@@ -40,16 +40,6 @@ namespace RegexIgnore
     public void LoadConfig(string config, Guid instanceID, string dataPath)
     {
       rx = new System.Text.RegularExpressions.Regex(config, System.Text.RegularExpressions.RegexOptions.Compiled);
-    }
-
-    public void LoadState(string state)
-    {
-      return;
-    }
-
-    public string SaveState()
-    {
-      return null;
     }
 
     public System.Threading.Tasks.Task StartService()
